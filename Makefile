@@ -1,8 +1,8 @@
 build:
-	v -prod -o bin/zoomer src
+	v -prod -o bin/zoomer .
 
 run:
-	./bin/zoomer
+	make build && ./bin/zoomer
 
 install:
 	sudo cp bin/zoomer /usr/local/bin/

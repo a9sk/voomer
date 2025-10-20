@@ -6,6 +6,22 @@
 //
 // More info: https://github.com/vlang/v
 
+module main
+
+import logger
+
 fn main() {
-	print('Hello, World')
+	info('application started')
+}
+
+fn debug(s string) {
+	logger.log(logger.Level.debug, s)
+}
+
+fn info(s string) {
+	logger.log(logger.Level.info, s)
+}
+
+fn err(s string) {
+	logger.log(logger.Level.err, s)
 }
