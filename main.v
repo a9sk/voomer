@@ -9,7 +9,6 @@
 module main
 
 import logger
-import init
 
 fn main() {
 	logger.info('application started')
@@ -27,10 +26,10 @@ fn main() {
 		// is unknow at compile time (obviously)
 		if session == 'x11' {
 			logger.debug('using X11 backend')
-			init.init_x11()
+			init_x11()
 		} else if session == 'wayland' {
 			logger.debug('using wayland backend')
-			init.init_wayland()
+			init_wayland()
 		}
 		// we do not need an else as find_session() only returns if
 		// i3 or wayland and exits otherwise

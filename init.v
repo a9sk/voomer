@@ -1,4 +1,4 @@
-module init
+module main
 
 import capture
 import logger
