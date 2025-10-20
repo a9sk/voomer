@@ -1,9 +1,10 @@
 module main
 
 import os
+import logger
 
 fn find_session() ?string {
-	debug('find_session')
+	logger.debug('find_session')
 
 	// find session follows this bash code:
 	//
@@ -18,6 +19,7 @@ fn find_session() ?string {
 	wayland_display := os.getenv('WAYLAND_DISPLAY')
 	display := os.getenv('DISPLAY')
 
+	//  TODO: check if this actually works on non x11 systems
 	if session_type == 'wayland' || wayland_display != '' {
 		return 'wayland'
 	} else if session_type == 'x11' || display != '' {

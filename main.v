@@ -9,52 +9,41 @@
 module main
 
 import logger
+import init
 
 fn main() {
-	info('application started')
+	logger.info('application started')
 
 	// uses compile time code compilation for smaller output files
 	// os detection is builtin (linux/windows/macos)
 	$if linux {
 		// very neat thing this of having or {} on null return
 		session := find_session() or {
-			lerr('unsupported linux display')
+			logger.err('unsupported linux display')
 			exit(1)
 		}
 
 		// we use normal if-else instead of $if-$else since session
 		// is unknow at compile time (obviously)
 		if session == 'x11' {
-			debug('using X11 backend')
-			init_x11()
+			logger.debug('using X11 backend')
+			init.init_x11()
 		} else if session == 'wayland' {
-			debug('using wayland backend')
-			init_wayland()
+			logger.debug('using wayland backend')
+			init.init_wayland()
 		}
 		// we do not need an else as find_session() only returns if
 		// i3 or wayland and exits otherwise
 	} $else $if windows {
-		lerr('windows not supported yet')
+		logger.err('windows not supported yet')
 		exit(1)
 	} $else $if macos {
-		lerr('mac os not supported yet')
+		logger.err('mac os not supported yet')
 		exit(1)
 	} $else {
-		lerr('os not supported yet')
+		logger.err('os not supported yet')
 		exit(1)
 	}
 
 	exit(0)
-}
-
-fn debug(s string) {
-	logger.log(logger.Level.debug, s)
-}
-
-fn info(s string) {
-	logger.log(logger.Level.info, s)
-}
-
-fn lerr(s string) {
-	logger.log(logger.Level.err, s)
 }
