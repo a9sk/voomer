@@ -12,6 +12,7 @@ pub enum Level {
 pub fn log(l Level, s string) {
 	// print('called: logger')
 	match l {
+		//  TODO: implement a base level to avoid debugs in prod
 		.debug { println(get_time() + ' [DEBUG]:  ' + s) }
 		.info { println(get_time() + ' [INFO]:   ' + s) }
 		.err { println(get_time() + ' [ERROR]:  ' + s) }
