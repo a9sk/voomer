@@ -3,6 +3,8 @@ module main
 import os
 import logger
 
+// find_session is un util that finds the session (lol)
+// uses env variables to find out if it is x11 or wayland
 fn find_session() ?string {
 	logger.debug('find_session')
 
