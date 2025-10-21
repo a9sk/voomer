@@ -5,6 +5,8 @@ import logger
 import render
 import cursor
 
+// init_x11 serves as a "main" function for x11 based systems
+// it initialized the x11 backend and starts the application
 pub fn init_x11() {
 	logger.debug('initializing x11 backend')
 
@@ -13,6 +15,8 @@ pub fn init_x11() {
 		logger.err('failed to initialize capture: ${err}')
 		exit(1)
 	}
+	logger.info('cap struct created succesfully: ' + cap.str())
+	logger.debug('display pointer: ' + cap.get_display_ptr_str())
 
 	// start renderer, it is a window over all the others
 	render.init_gl_window()
@@ -34,6 +38,7 @@ pub fn init_x11() {
 	}
 }
 
+//  TODO: document init_wayland
 pub fn init_wayland() {
 	logger.err('wayland not supported yet')
 	exit(1)
