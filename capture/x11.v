@@ -1,41 +1,16 @@
 module capture
 
 import logger
+import x11
+// something to understand:
+// when compiling i get the following error:
+// capture/x11.v:4:8: warning: module 'x11' is imported but never used
+// but if i try to remove the import everything fails lol
 
 #flag -lX11
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdlib.h>
-
-// ----------------------------------
-// declare these to satisfy v's parser
-
-@[typedef]
-struct C.Display {}
-
-@[typedef]
-struct C.GC {}
-
-type C.Window = u64
-
-type C.int = int
-
-// Display *XOpenDisplay(char *display_name);
-fn C.XOpenDisplay(display_name &char) &C.Display
-
-// Window XDefaultRootWindow(Display *display);
-fn C.XDefaultRootWindow(display &C.Display) C.Window
-
-// GC XCreateGC(Display *display, Drawable d, unsigned long valuemask, XGCValues *values);
-fn C.XCreateGC(display &C.Display, d C.Window, valuemask u64, values voidptr) C.GC
-
-// int XDefaultScreen(Display *display);
-fn C.XDefaultScreen(display &C.Display) int
-
-// GC XDefaultGC(Display *display, int screen_number);
-fn C.XDefaultGC(display &C.Display, screen int) C.GC
-
-// ----------------------------------
 
 struct X11Capturer {
 mut:
@@ -155,7 +130,7 @@ fn x11_default_gc(display &C.Display, screen int) !C.GC {
 }
 
 // get_display_ptr_str returns the cap.display pointer casted to string
-pub fn (cap &X11Capturer) get_display_ptr_str() string {
+pub fn (cap X11Capturer) get_display_ptr_str() string {
 	return cap.display.str()
 }
 
