@@ -7,16 +7,11 @@ import x11
 // capture/x11.v:4:8: warning: module 'x11' is imported but never used
 // but if i try to remove the import everything fails lol
 
-#flag -lX11
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <stdlib.h>
-
 struct X11Capturer {
-mut:
+pub mut:
 	display &C.Display // the active connection to the X server
 	root    C.Window   // the top-level window (the full screen)
-	gc      C.GC       // graphic context helper for drawing/copying
+	// gc      C.GC       // graphic context helper for drawing/copying
 }
 
 // new_x11_capturer initializes and returns an X11Capturer
@@ -31,7 +26,7 @@ pub fn new_x11_capturer() !X11Capturer {
 	mut cap := X11Capturer{
 		display: x11_open_display() or { return error('${err}') }
 		root:    0
-		gc:      C.GC(0)
+		// gc:      C.GC(0) // note: i am not using a graphic context for now
 	}
 	logger.debug('display ptr valid? ${cap.display != unsafe { nil }}')
 	logger.debug('cap.display set correctly')
@@ -39,12 +34,14 @@ pub fn new_x11_capturer() !X11Capturer {
 	cap.root = x11_default_root_window(cap.display) or { return error('${err}') }
 	logger.debug('cap.root set correctly')
 
-	// TODO: move to function
+	// note: i am not using a graphic context for now, i will need it when i will be drawing
+	//       to the window and stuff like that
+	// this first version is only used for an initial implementation
 	// screen := C.XDefaultScreen(cap.display)
 	// cap.gc = x11_default_gc(cap.display, screen) or { return error('${err}') }
-
-	cap.gc = x11_create_gc(cap.display, cap.root) or { return error('${err}') }
-	logger.debug('cap.gc set correctly')
+	// x11_create_gc should be the function used for th gc
+	// cap.gc = x11_create_gc(cap.display, cap.root) or { return error('${err}') }
+	// logger.debug('cap.gc set correctly')
 
 	logger.info('X11Capturer created succesfully, returning now...')
 
@@ -70,7 +67,6 @@ fn x11_open_display() !&C.Display {
 // x11_default_root_window uses C's XDefaultRootWindow to
 // retrive the root window (the full screen)
 // note: even if you switch vdesktop x11 draws it on the same root
-// TODO: maybe it would be better to return a C.Window and not the u64 value
 fn x11_default_root_window(display &C.Display) !C.Window {
 	logger.debug('x11_default_root_window start function')
 	// ref: https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#Display_Functions
@@ -89,7 +85,6 @@ fn x11_default_root_window(display &C.Display) !C.Window {
 // x11_create_gc uses C's XCreateGC to create a graphic
 // contex and returns it to the caller
 // note: this function is not used for now as it segfaults
-// TODO: implement a working x11_create_cg function for pretty drawing
 fn x11_create_gc(display &C.Display, root C.Window) !C.GC {
 	logger.debug('x11_create_gc start function')
 	logger.debug('display: ${display.str()}, root: ${root}')
@@ -101,6 +96,7 @@ fn x11_create_gc(display &C.Display, root C.Window) !C.GC {
 	// and depth as the specified drawable.
 	// Use with other drawables results in a BadMatch error.
 	// XCreateGC can generate BadAlloc, BadDrawable, BadFont, BadMatch, BadPixmap, and BadValue errors.
+	//  TODO: add error checks
 	d := C.XCreateGC(display, root, u64(0), unsafe { nil })
 	// if d == C.GC(0) {
 	//	return error('failed to create X graphic context')
@@ -120,6 +116,7 @@ fn x11_default_gc(display &C.Display, screen int) !C.GC {
 	// This macro or function should be used to retrieve the screen number
 	// in applications that will use only a single screen.
 	// GC XDefaultGC(Display *display, int screen_number);
+	//  TODO: add error checks
 	d := C.XDefaultGC(display, screen)
 	// if d == C.GC(0) {
 	// 	return error('failed to retrive X default graphic context')
