@@ -3,9 +3,13 @@ module x11
 // this file defines all of the c structs, c types and c functions
 
 #flag -lX11
+// #flag -lGL
+// #flag -lGLX
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdlib.h>
+// #include <GL/glx.h>
 
 // ----------------------------------
 // types and functions used by the capture module
@@ -47,7 +51,15 @@ pub struct C.XVisualInfo {}
 @[typedef]
 pub struct C.Colormap {}
 
+pub type C.Screen = u64
+
 // this type is commented since it is defined earlier in this file
 // pub type C.Window = u64
+
+// XVisualInfo *glXChooseVisual($display, $screen, \@attributes);
+pub fn C.glXChooseVisual(display &C.Display, C.int, &C.int) &C.XVisualInfo
+
+// Screen *XDefaultScreenOfDisplay(Display *display);
+pub fn C.XDefaultScreenOfDisplay(display &C.Display) &C.Screen
 
 // ----------------------------------

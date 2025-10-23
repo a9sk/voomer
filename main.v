@@ -10,6 +10,8 @@ module main
 
 import logger
 
+#flag -DSOKOL_DONT_DECLARE_GLX_TYPES
+
 fn main() {
 	logger.info('application started')
 
