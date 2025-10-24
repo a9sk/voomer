@@ -32,14 +32,16 @@ pub fn init_x11() {
 		logger.err('failed to create a new renderer: ${err}')
 		exit(1)
 	}
+	// logger.debug('renderer struct created successfully: ' + renderer.str())
 
 	for {
 		// we should only capture the region in a specific zone around the cursor
-		x, y, w, h := cursor.get_cursor_with_pad() or {
+		x, y, w, h := cursor.get_cursor_with_pad(cap.display, cap.root) or {
 			logger.err('get cursor failed: ${err}')
 			break
 		}
-
+		logger.debug('cursor position: x=${x}, y=${y}, w=${w}, h=${h}')
+		// capture the region around the cursor
 		img := cap.capture_region(x, y, w, h) or {
 			logger.err('capture failed: ${err}')
 			break

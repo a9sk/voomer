@@ -63,3 +63,15 @@ pub fn C.glXChooseVisual(display &C.Display, C.int, &C.int) &C.XVisualInfo
 pub fn C.XDefaultScreenOfDisplay(display &C.Display) &C.Screen
 
 // ----------------------------------
+
+// ----------------------------------
+// types and functions used by the cursor module
+
+type C.uint = u32
+
+type C.Bool = int
+
+// Bool XQueryPointer(Display *display, Window w, Window *root_return, Window *child_return, int *root_x_return, int *root_y_return, int *win_x_return, int *win_y_return, unsigned int *mask_return);
+pub fn C.XQueryPointer(display &C.Display, w &C.Window, root_return &C.Window, child_return &C.Window, root_x_return &C.int, root_y_return &C.int, win_x_return &C.int, win_y_return &C.int, mask_return &u32) C.Bool
+
+// ----------------------------------
