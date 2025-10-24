@@ -131,11 +131,52 @@ pub fn (cap X11Capturer) get_display_ptr_str() string {
 	return cap.display.str()
 }
 
-//  TODO: document capture_region
-pub fn (cap X11Capturer) capture_region(x int, y int, w int, h int) ![]u8 {
+// capture_region uses C's XGetImage to capture
+// a specific region of the screen and returns it as a byte array
+pub fn (cap X11Capturer) capture_region(x int, y int, w int, h int) !&C.XImage {
 	logger.debug('capture_region start function')
 
-	return error('not implemented yet!!!')
+	// ref:
+	// The XGetImage function returns a pointer to an XImage structure.
+	// This structure provides you with the contents of the specified rectangle
+	// of the drawable in the format you specify. If the format argument is XYPixmap,
+	// the image contains only the bit planes you passed to the plane_mask argument.
+	// If the plane_mask argument only requests a subset of the planes of the display,
+	// the depth of the returned image will be the number of planes requested.
+	// If the format argument is ZPixmap, XGetImage returns as zero the bits
+	// in all planes not specified in the plane_mask argument.
+	// The function performs no range checking on the values in plane_mask
+	// and ignores extraneous bits.
+	// XGetImage returns the depth of the image to the depth member of the XImage structure.
+	// The depth of the image is as specified when the drawable was created,
+	// except when getting a subset of the planes in XYPixmap format,
+	// when the depth is given by the number of bits set to 1 in plane_mask.
+	// If the drawable is a pixmap, the given rectangle must be wholly contained
+	// within the pixmap, or a BadMatch error results. If the drawable is a window,
+	// the window must be viewable, and it must be the case that if there were no inferiors
+	// or overlapping windows, the specified rectangle of the window would be fully
+	// visible on the screen and wholly contained within the outside edges of the window,
+	// or a BadMatch error results. Note that the borders of the window can be included
+	// and read with this request. If the window has backing-store, the backing-store
+	// contents are returned for regions of the window that are obscured by noninferior windows.
+	// If the window does not have backing-store, the returned contents of such
+	// obscured regions are undefined. The returned contents of visible regions of
+	// inferiors of a different depth than the specified window's depth are also undefined.
+	// The pointer cursor image is not included in the returned contents.
+	// If a problem occurs, XGetImage returns NULL.
+	// XGetImage can generate BadDrawable, BadMatch, and BadValue errors.
+	// XImage *XGetImage(Display *display, Drawable d, int x, int y, unsigned int width, unsigned int height, unsigned long plane_mask, int format);
+	d := C.XGetImage(cap.display, cap.root, u64(x), u64(y), u32(w), u32(h), u64(0xFFFFFFFF),
+		2) // 2 is ZPixmap
+	// note: for how the code is implemented right now, if the cursor is too close
+	//       to the screen borders, the capture will fail
+	// TODO: implement a way to capture regions close to the borders
+	if d == unsafe { nil } {
+		return error('failed to capture region x=${x}, y=${y}, w=${w}, h=${h}')
+	}
+	logger.debug('region captured succesfully: x=${x}, y=${y}, w=${w}, h=${h}')
+
+	return d
 }
 
 //  TODO: document clean_capturer

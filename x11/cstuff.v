@@ -20,6 +20,9 @@ pub struct C.Display {}
 @[typedef]
 pub struct C.GC {}
 
+@[typedef]
+pub struct C.XImage {}
+
 pub type C.Window = u64
 
 pub type C.int = int
@@ -38,6 +41,9 @@ pub fn C.XDefaultScreen(display &C.Display) int
 
 // GC XDefaultGC(Display *display, int screen_number);
 pub fn C.XDefaultGC(display &C.Display, screen int) C.GC
+
+// XImage *XGetImage(Display *display, Drawable d, int x, int y, unsigned int width, unsigned int height, unsigned long plane_mask, int format);
+pub fn C.XGetImage(display &C.Display, d C.Window, x C.int, y C.int, width u32, height u32, plane_mask u64, format C.int) &C.XImage
 
 // ----------------------------------
 

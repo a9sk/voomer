@@ -2,6 +2,7 @@ module render
 
 import logger
 import gg
+import x11
 
 struct GGRenderer {
 mut:
@@ -24,4 +25,10 @@ pub fn new_renderer() !GGRenderer {
 	logger.info('new gg context created succesfully')
 
 	return renderer
+}
+
+pub fn (mut r GGRenderer) draw_zoom(img &C.XImage, w int, h int) {
+	r.gg.begin()
+	// TODO: convert raw data to gg.Image, draw scaled
+	r.gg.end()
 }
