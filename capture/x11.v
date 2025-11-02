@@ -136,7 +136,7 @@ pub fn (cap X11Capturer) get_display_ptr_str() string {
 pub fn (cap X11Capturer) capture_region(x int, y int, w int, h int) !&C.XImage {
 	logger.debug('capture_region start function')
 
-	// ref:
+	// ref: https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XQueryPointer
 	// The XGetImage function returns a pointer to an XImage structure.
 	// This structure provides you with the contents of the specified rectangle
 	// of the drawable in the format you specify. If the format argument is XYPixmap,

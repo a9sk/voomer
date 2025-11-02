@@ -4,6 +4,8 @@ import capture
 import logger
 import render
 import cursor
+import time
+import x11
 
 // TODO: migrate to using App struct:
 // struct App {
@@ -15,6 +17,11 @@ import cursor
 // it initialized the x11 backend and starts the application
 pub fn init_x11() {
 	logger.debug('initializing x11 backend')
+
+	// set custom x11 error handler
+	x11.set_x11_error_handler()
+
+	logger.info('custom X11 error handler set')
 
 	// start screen capture, is mutable since it changes...
 	mut cap := capture.new_x11_capturer() or {
@@ -46,9 +53,13 @@ pub fn init_x11() {
 			logger.err('capture failed: ${err}')
 			break
 		}
+
 		// render the single frames
 		renderer.draw_zoom(img, w, h)
+		time.sleep(16 * time.millisecond)
 	}
+
+	logger.info('failed gracefully')
 }
 
 //  TODO: document init_wayland

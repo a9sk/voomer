@@ -81,3 +81,33 @@ type C.Bool = int
 pub fn C.XQueryPointer(display &C.Display, w &C.Window, root_return &C.Window, child_return &C.Window, root_x_return &C.int, root_y_return &C.int, win_x_return &C.int, win_y_return &C.int, mask_return &u32) C.Bool
 
 // ----------------------------------
+
+// ----------------------------------
+// error codes
+
+// BadMatch error code
+pub const bad_match = 8
+
+// XGetErrorText(Display *display, int code, char *buffer_return, int length);
+pub fn C.XGetErrorText(display &C.Display, code C.int, buffer_return &char, length C.int)
+
+// ----------------------------------
+
+// ----------------------------------
+// X11 error handling
+
+@[typedef]
+pub struct C.XErrorEvent {
+pub:
+	display      &C.Display
+	resourceid   u64
+	serial       u64
+	error_code   u8
+	request_code u8
+	minor_code   u8
+}
+
+// XSetErrorHandler(int (*handler)(Display *, XErrorEvent *));
+pub fn C.XSetErrorHandler(handler fn (&C.Display, &C.XErrorEvent) C.int) ?
+
+// ----------------------------------
