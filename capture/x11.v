@@ -7,7 +7,8 @@ import x11
 // capture/x11.v:4:8: warning: module 'x11' is imported but never used
 // but if i try to remove the import everything fails lol
 
-struct X11Capturer {
+@[heap]
+pub struct X11Capturer {
 pub mut:
 	display &C.Display // the active connection to the X server
 	root    C.Window   // the top-level window (the full screen)

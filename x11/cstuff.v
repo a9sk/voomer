@@ -20,8 +20,28 @@ pub struct C.Display {}
 @[typedef]
 pub struct C.GC {}
 
+pub type C.ulong = u64
+pub type C.size_t = usize
+
 @[typedef]
-pub struct C.XImage {}
+pub struct C.XImage {
+pub:
+	width            C.int
+	height           C.int
+	xoffset          C.int
+	format           C.int
+	data             &u8 // char *data
+	byte_order       C.int
+	bitmap_unit      C.int
+	bitmap_bit_order C.int
+	bitmap_pad       C.int
+	depth            C.int
+	bytes_per_line   C.int
+	bits_per_pixel   C.int
+	red_mask         C.ulong
+	green_mask       C.ulong
+	blue_mask        C.ulong
+}
 
 pub type C.Window = u64
 
@@ -67,6 +87,12 @@ pub fn C.glXChooseVisual(display &C.Display, C.int, &C.int) &C.XVisualInfo
 
 // Screen *XDefaultScreenOfDisplay(Display *display);
 pub fn C.XDefaultScreenOfDisplay(display &C.Display) &C.Screen
+
+// unsigned long XGetPixel(XImage *ximage, int x, int y);
+pub fn C.XGetPixel(ximg &C.XImage, x C.int, y C.int) C.ulong
+
+// *memcpy(void *dest, const void *src, size_t n);
+pub fn C.memcpy(dest voidptr, src voidptr, n C.size_t) voidptr
 
 // ----------------------------------
 

@@ -35,29 +35,35 @@ pub fn init_x11() {
 	// start renderer, it is a window over all the others
 	// render.init_gl_window(cap.display) or { logger.err('gl window initialization failed: ${err}') }
 
-	mut renderer := render.new_renderer() or {
+	mut renderer := render.new_renderer(&cap) or {
 		logger.err('failed to create a new renderer: ${err}')
 		exit(1)
 	}
+
 	// logger.debug('renderer struct created successfully: ' + renderer.str())
 
-	for {
-		// we should only capture the region in a specific zone around the cursor
-		x, y, w, h := cursor.get_cursor_with_pad(cap.display, cap.root) or {
-			logger.err('get cursor failed: ${err}')
-			break
-		}
-		logger.debug('cursor position: x=${x}, y=${y}, w=${w}, h=${h}')
-		// capture the region around the cursor
-		img := cap.capture_region(x, y, w, h) or {
-			logger.err('capture failed: ${err}')
-			break
-		}
+	// for {
+	// we should only capture the region in a specific zone around the cursor
+	// x, y, w, h := cursor.get_cursor_with_pad(cap.display, cap.root) or {
+	//	logger.err('get cursor failed: ${err}')
+	//	break
+	// }
+	// logger.debug('cursor position: x=${x}, y=${y}, w=${w}, h=${h}')
+	// capture the region around the cursor
+	// img := cap.capture_region(x, y, w, h) or {
+	//	logger.err('capture failed: ${err}')
+	//	break
+	// }
 
-		// render the single frames
-		renderer.draw_zoom(img, w, h)
-		time.sleep(16 * time.millisecond)
-	}
+	// render the single frames
+	// renderer.draw_zoom(img, w, h) or {
+	//	logger.err('draw zoom failed: ${err}')
+	//	break
+	// }
+	// time.sleep(16 * time.millisecond)
+	// }
+
+	renderer.gg.run()
 
 	logger.info('failed gracefully')
 }

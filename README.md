@@ -1,5 +1,7 @@
 # voomer
 
+> **Note:** I hate vlang. You will hate it too.
+
 Zooming utility written in V.
 
 ### References:
@@ -17,3 +19,8 @@ Zooming utility written in V.
 - https://github.com/vlang/v/blob/master/vlib/context
 - https://github.com/vlang/v/blob/master/vlib/gg
 - https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XQueryPointer
+- https://modules.vlang.io/gg.html
+- https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XGetErrorText
+- https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XSetErrorHandler
+- https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XGetPixel
+
