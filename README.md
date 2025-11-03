@@ -1,5 +1,7 @@
 # voomer
 
+> *note*: this branch contains the "old" version of the project, the approach is simplified in the current *main* branch.
+
 Zooming utility written in V.
 
 ### References:
